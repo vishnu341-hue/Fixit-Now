@@ -1,0 +1,108 @@
+@import "tailwindcss";
+
+@theme {
+  --color-background: #0A0A0B;
+  --color-foreground: #FFFFFF;
+  --color-primary: #3B82F6;
+  --color-primary-dark: #1D4ED8;
+  --color-primary-light: #60A5FA;
+  --color-primary-electric: #00E5FF;
+  --color-secondary: #1F2937;
+  --color-secondary-dark: #111827;
+  --color-secondary-light: #374151;
+  --color-surface: #161618;
+  --color-surface-lighter: #1C1C1E;
+  --color-surface-darker: #0E0E0F;
+  --color-border: #27272A;
+  
+  --radius-2xl: 1rem;
+  --radius-3xl: 1.5rem;
+  --radius-4xl: 2rem;
+  
+  --shadow-premium: 0 10px 30px -10px rgba(0, 0, 0, 0.5);
+  --shadow-electric: 0 0 20px -5px rgba(0, 229, 255, 0.3);
+  --shadow-soft: 0 18px 40px -24px rgba(0, 0, 0, 0.75);
+  
+  --font-sans: "Inter", system-ui, sans-serif;
+}
+
+:root {
+  color-scheme: dark;
+}
+
+html {
+  scroll-behavior: smooth;
+}
+
+body {
+  @apply bg-background text-foreground antialiased selection:bg-primary/30;
+  font-family: var(--font-sans);
+  overflow-x: hidden;
+  min-height: 100svh;
+  -webkit-tap-highlight-color: transparent;
+  background-image:
+    radial-gradient(40rem 30rem at 10% 5%, rgba(59, 130, 246, 0.11), transparent 70%),
+    radial-gradient(35rem 30rem at 90% 90%, rgba(0, 229, 255, 0.08), transparent 70%);
+}
+
+/* Safe area support */
+.safe-area-bottom {
+  padding-bottom: env(safe-area-inset-bottom);
+}
+
+.safe-area-top {
+  padding-top: env(safe-area-inset-top);
+}
+
+/* Glassmorphism utility */
+.glass {
+  @apply bg-surface/80 backdrop-blur-xl border border-white/5;
+}
+
+.app-scroll {
+  scroll-behavior: smooth;
+  overscroll-behavior-y: contain;
+  -webkit-overflow-scrolling: touch;
+}
+
+/* Custom scrollbar */
+::-webkit-scrollbar {
+  width: 4px;
+}
+
+::-webkit-scrollbar-track {
+  @apply bg-transparent;
+}
+
+::-webkit-scrollbar-thumb {
+  @apply bg-white/10 rounded-full hover:bg-white/20 transition-colors;
+}
+
+/* Base animations */
+@layer base {
+  input, button, a {
+    @apply transition-all duration-200;
+  }
+
+  *:focus-visible {
+    @apply outline-none ring-2 ring-primary/45 ring-offset-2 ring-offset-background;
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  *, *::before, *::after {
+    animation-duration: 0.01ms !important;
+    animation-iteration-count: 1 !important;
+    transition-duration: 0.01ms !important;
+    scroll-behavior: auto !important;
+  }
+}
+
+/* Hide scrollbar utility */
+@utility no-scrollbar {
+  -ms-overflow-style: none;
+  scrollbar-width: none;
+  &::-webkit-scrollbar {
+    display: none;
+  }
+}
