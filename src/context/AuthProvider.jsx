@@ -1,4 +1,4 @@
-import { createContext, useCallback, useEffect, useMemo, useState, useRef } from 'react'
+import { createContext, useCallback, useEffect, useMemo, useState } from 'react'
 import { supabase } from '../lib/supabaseClient'
 import { getOAuthCallbackMessage } from '../services/authMessages'
 import { ensureUserProfile } from '../services/profileService'
@@ -9,7 +9,7 @@ export const AuthProvider = ({ children }) => {
   const [session, setSession] = useState(null)
   const [user, setUser] = useState(null)
   const [profile, setProfile] = useState(null)
-  const [authMessage, setAuthMessage] = useState('')
+  const [authMessage, setAuthMessage] = useState(() => getOAuthCallbackMessage(window.location.href))
   const [isLoading, setIsLoading] = useState(true)
   
   // Helper to safely clear loading state with logging
@@ -57,10 +57,10 @@ export const AuthProvider = ({ children }) => {
   useEffect(() => {
     let isMounted = true
 
-    // Set error messages from URL if present
-    if (initialCallbackMessage) {
+    // Set error messages from URL if present (handled in state initializer)
+    /* if (initialCallbackMessage) {
       setAuthMessage(initialCallbackMessage)
-    }
+    } */
 
     // Global safety timeout - NO MATTER WHAT, clear loading after 8 seconds
     const safetyTimeout = setTimeout(() => {
@@ -69,14 +69,6 @@ export const AuthProvider = ({ children }) => {
         clearLoading('safety-timeout');
       }
     }, 8000);
-
-    // Auto-clear auth message after 3 seconds
-    let messageTimer;
-    if (authMessage) {
-      messageTimer = setTimeout(() => {
-        if (isMounted) setAuthMessage('');
-      }, 2500);
-    }
 
     // Initialize session
     const initSession = async () => {
@@ -159,10 +151,19 @@ export const AuthProvider = ({ children }) => {
     return () => {
       isMounted = false
       clearTimeout(safetyTimeout);
-      if (messageTimer) clearTimeout(messageTimer);
       authListener?.subscription?.unsubscribe()
     }
-  }, [loadProfile, initialCallbackMessage])
+  }, [loadProfile, clearLoading, isLoading])
+
+  // Effect to auto-clear auth messages
+  useEffect(() => {
+    if (authMessage) {
+      const timer = setTimeout(() => {
+        setAuthMessage('');
+      }, 2500);
+      return () => clearTimeout(timer);
+    }
+  }, [authMessage]);
 
   // Cleanup URL separately to not block initialization
   useEffect(() => {

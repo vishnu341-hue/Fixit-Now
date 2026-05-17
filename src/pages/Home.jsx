@@ -1,4 +1,4 @@
-import React, { useEffect, useMemo, useState } from 'react';
+import { useEffect, useMemo, useState } from 'react';
 import { AnimatePresence, motion } from 'framer-motion';
 import { Zap, MapPin, Search, UserRound, Wrench, Droplets, PlugZap } from 'lucide-react';
 import { getServices } from '../services/serviceService';
@@ -75,6 +75,11 @@ const defaultServices = [
     keywords: ['plumber', 'pipes', 'leaks', 'drainage'],
   },
 ];
+
+const getTomorrowDate = () => {
+  const tomorrow = new Date(Date.now() + 24 * 60 * 60 * 1000);
+  return tomorrow.toISOString().split('T')[0];
+};
 
 const Home = ({ onOpenProfile, onOpenElectricianServices }) => {
   const [searchQuery, setSearchQuery] = useState('');
@@ -168,10 +173,15 @@ const Home = ({ onOpenProfile, onOpenElectricianServices }) => {
     }
 
     try {
+      const bookingDate = getTomorrowDate();
+      const bookingTime = '10:00 AM';
+
       await createBooking({
         userId: user.id,
         serviceId: service.id,
-        scheduledAt: new Date(Date.now() + 24 * 60 * 60 * 1000).toISOString(),
+        serviceName: service.name,
+        bookingDate,
+        bookingTime,
         notes: 'Booked from home page',
       });
       setBookingMessage(`${service.name} booking created.`);

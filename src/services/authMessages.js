@@ -27,7 +27,39 @@ const ERROR_MESSAGE_RULES = [
       message.includes('provider is not enabled') ||
       message.includes('unsupported provider'),
     message:
-      'Google login is not configured yet. Please use email login for now.',
+      'Login provider is not configured yet. Please check your Supabase Dashboard Providers settings.',
+  },
+  {
+    test: (message) =>
+      message.includes('unsupported phone provider') ||
+      message.includes('phone_provider_disabled') ||
+      message.includes('phone provider is not enabled'),
+    message:
+      'Phone Authentication is not enabled in the Supabase Dashboard. Please enable the "Phone" provider in Authentication > Providers.',
+  },
+  {
+    test: (message) =>
+      message.includes('unexpected failure') ||
+      message.includes('unexpected_failure'),
+    message:
+      'SMS sending failed (500 Unexpected failure). This usually indicates that the SMS provider (e.g. Twilio) is not configured, or has invalid/expired API credentials in the Supabase Dashboard. Please verify your SMS settings.',
+  },
+  {
+    test: (message) =>
+      message.includes('invalid phone number') ||
+      message.includes('invalid format'),
+    message:
+      'Invalid phone number. Please check the format. It must start with "+" followed by the country code and digits (e.g., +919876543210).',
+  },
+  {
+    test: (message) =>
+      message.includes('invalid token') ||
+      message.includes('token is invalid') ||
+      message.includes('otp incorrect') ||
+      message.includes('invalid otp') ||
+      message.includes('expired'),
+    message:
+      'The OTP code you entered is invalid or has expired. Please try again.',
   },
   {
     test: (message) =>

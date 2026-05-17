@@ -65,3 +65,42 @@ export const updateUserEmail = async (newEmail) => {
   if (error) throw error
   return data
 }
+
+export const signInWithPhone = async (phone) => {
+  console.log('[AuthService] Attempting signInWithOtp for phone:', phone)
+  const { data, error } = await supabase.auth.signInWithOtp({
+    phone: phone,
+  })
+  
+  if (error) {
+    console.error('[AuthService] Phone OTP request failed detailed logs:', {
+      message: error.message,
+      status: error.status,
+      code: error.code,
+      raw: error
+    })
+    throw error
+  }
+  return data
+}
+
+export const verifyPhoneOtp = async ({ phone, token }) => {
+  console.log('[AuthService] Attempting verifyOtp for phone:', phone)
+  const { data, error } = await supabase.auth.verifyOtp({
+    phone: phone,
+    token: token,
+    type: 'sms',
+  })
+  
+  if (error) {
+    console.error('[AuthService] Phone OTP verification failed detailed logs:', {
+      message: error.message,
+      status: error.status,
+      code: error.code,
+      raw: error
+    })
+    throw error
+  }
+  return data
+}
+

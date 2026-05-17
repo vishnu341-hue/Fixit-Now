@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from 'react';
+import { useEffect, useState } from 'react';
 import { getUserBookings } from '../services/bookingService';
 import { useAuth } from '../hooks/useAuth';
 import { ChevronLeft } from 'lucide-react';
@@ -84,11 +84,11 @@ const Bookings = ({ onBack }) => {
             className="rounded-3xl border border-white/10 bg-surface-lighter px-5 py-4 shadow-soft"
           >
             <p className="text-sm font-bold text-white/90">
-              {booking.service?.name ?? 'Service'}
+              {booking.service_name ?? 'Service'}
             </p>
             <p className="mt-1 text-xs text-white/65">
-              {booking.scheduled_at
-                ? new Date(booking.scheduled_at).toLocaleString()
+              {booking.booking_date && booking.booking_time
+                ? `${booking.booking_date} at ${booking.booking_time}`
                 : 'Schedule pending'}
             </p>
             <p className="mt-2 text-xs uppercase tracking-wide text-primary-electric">

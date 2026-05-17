@@ -1,4 +1,4 @@
-import React, { useEffect, useMemo, useState } from 'react';
+import { useEffect, useMemo, useState } from 'react';
 import { motion } from 'framer-motion';
 import { ArrowLeft, Fan, Lightbulb } from 'lucide-react';
 import { getElectricianServices } from '../services/serviceService';
@@ -8,6 +8,11 @@ import { useAuth } from '../hooks/useAuth';
 const iconByName = {
   fan: Fan,
   light: Lightbulb,
+};
+
+const getTomorrowDate = () => {
+  const tomorrow = new Date(Date.now() + 24 * 60 * 60 * 1000);
+  return tomorrow.toISOString().split('T')[0];
 };
 
 const ElectricianServices = ({ onBack }) => {
@@ -47,10 +52,15 @@ const ElectricianServices = ({ onBack }) => {
     }
 
     try {
+      const bookingDate = getTomorrowDate();
+      const bookingTime = '11:00 AM';
+
       await createBooking({
         userId: user.id,
         serviceId: service.id,
-        scheduledAt: new Date(Date.now() + 24 * 60 * 60 * 1000).toISOString(),
+        serviceName: service.name,
+        bookingDate,
+        bookingTime,
         notes: `Booked ${service.name}`,
       });
       setStatusMessage(`Booking created for ${service.name}.`);

@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from 'react';
+import { useEffect, useState } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
 import { CheckCircle2 } from 'lucide-react';
 import Home from './pages/Home';
@@ -10,7 +10,11 @@ import { useAuth } from './hooks/useAuth';
 import { supabase } from './lib/supabaseClient';
 
 const App = () => {
-  const [activeTab, setActiveTab] = useState('home');
+  const [activeTab, setActiveTab] = useState(() => {
+    const isCallback = window.location.pathname === '/auth/callback' || 
+                      window.location.hash.includes('access_token=');
+    return isCallback ? 'profile' : 'home';
+  });
   const { isLoading, user, session, authMessage } = useAuth();
 
   console.log("--- APP RENDER ---");
@@ -26,28 +30,9 @@ const App = () => {
       console.log("APP GET SESSION:", data.session);
     };
     checkSession();
-
-    // Handle redirection from auth callback
-    const isCallback = window.location.pathname === '/auth/callback' || 
-                      window.location.hash.includes('access_token=');
-    
-    if (isCallback) {
-      console.log("--- IMMEDIATELY AFTER REDIRECT ---");
-      console.log("CURRENT URL:", window.location.href);
-      setActiveTab('profile');
-    }
   }, []);
 
-  useEffect(() => {
-    // If we are on the callback path and user is now available, 
-    // make sure we are showing the profile tab
-    const isCallback = window.location.pathname === '/auth/callback' || 
-                      window.location.hash.includes('access_token=');
 
-    if (user?.id && isCallback) {
-      setActiveTab('profile');
-    }
-  }, [user, isLoading]);
 
   const renderPage = () => {
     switch (activeTab) {
@@ -109,9 +94,9 @@ const App = () => {
 
   return (
     <div className="relative min-h-screen bg-background text-foreground selection:bg-primary/30">
-      <div className="relative mx-auto flex min-h-screen w-full max-w-[430px] flex-col overflow-hidden border-x border-white/[0.05] bg-gradient-to-b from-surface/75 via-background to-background shadow-[0_24px_60px_-32px_rgba(0,0,0,0.9)] sm:min-h-[100svh] sm:rounded-[2rem] sm:border sm:border-white/10 sm:my-3">
+      <div className="relative mx-auto flex min-h-screen w-full max-w-[430px] flex-col border-x border-white/[0.05] bg-gradient-to-b from-surface/75 via-background to-background shadow-[0_24px_60px_-32px_rgba(0,0,0,0.9)] sm:min-h-[100svh] sm:rounded-[2rem] sm:border sm:border-white/10 sm:my-3">
         {/* Main Content Area */}
-        <main className="app-scroll flex-1 overflow-y-auto px-4 pt-4 pb-28 no-scrollbar">
+        <main className="app-scroll px-4 pt-4 pb-28">
           <AnimatePresence mode="wait">
             <motion.div
               key={activeTab}

@@ -7,18 +7,15 @@ export const getUserBookings = async (userId) => {
       `
       id,
       status,
-      scheduled_at,
+      service_name,
+      booking_date,
+      booking_time,
       notes,
-      created_at,
-      service:services (
-        id,
-        name,
-        description
-      )
+      created_at
     `,
     )
     .eq('user_id', userId)
-    .order('scheduled_at', { ascending: false })
+    .order('booking_date', { ascending: false })
 
   if (error) throw error
   return data ?? []
@@ -27,7 +24,9 @@ export const getUserBookings = async (userId) => {
 export const createBooking = async ({
   userId,
   serviceId,
-  scheduledAt,
+  serviceName,
+  bookingDate,
+  bookingTime,
   notes = '',
 }) => {
   const { data, error } = await supabase
@@ -35,7 +34,9 @@ export const createBooking = async ({
     .insert({
       user_id: userId,
       service_id: serviceId,
-      scheduled_at: scheduledAt,
+      service_name: serviceName,
+      booking_date: bookingDate,
+      booking_time: bookingTime,
       notes,
       status: 'pending',
     })
@@ -43,14 +44,11 @@ export const createBooking = async ({
       `
       id,
       status,
-      scheduled_at,
+      service_name,
+      booking_date,
+      booking_time,
       notes,
-      created_at,
-      service:services (
-        id,
-        name,
-        description
-      )
+      created_at
     `,
     )
     .maybeSingle()

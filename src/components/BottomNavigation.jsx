@@ -1,4 +1,3 @@
-import React from 'react';
 import { motion } from 'framer-motion';
 import { Home, Calendar, User } from 'lucide-react';
 
@@ -21,7 +20,7 @@ const BottomNavigation = ({ activeTab = 'home', onTabChange }) => {
             <motion.button
               key={item.id}
               onClick={() => onTabChange?.(item.id)}
-              className="group relative flex min-w-[72px] flex-1 flex-col items-center justify-center rounded-2xl px-1.5 py-2 transition-colors"
+              className="group relative flex min-w-[72px] flex-1 flex-col items-center justify-center rounded-2xl px-1.5 py-2.5 transition-colors"
               whileTap={{ scale: 0.9 }}
             >
               {isActive && (
@@ -42,7 +41,7 @@ const BottomNavigation = ({ activeTab = 'home', onTabChange }) => {
               <motion.span
                 initial={{ opacity: 0.8, y: 0 }}
                 animate={{ opacity: 1, y: 0 }}
-                className={`relative z-10 mt-1 text-[9px] font-bold transition-colors duration-300 ${
+                className={`relative z-10 mt-1.5 text-[9px] font-bold transition-colors duration-300 ${
                   isActive ? 'text-primary-electric' : 'text-white/60 group-hover:text-white/80'
                 }`}
               >

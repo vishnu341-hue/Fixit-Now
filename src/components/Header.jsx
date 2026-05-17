@@ -1,8 +1,7 @@
-import React from 'react';
 import { motion } from 'framer-motion';
 import { Bell, MapPin, Search } from 'lucide-react';
 
-const Header = ({ title, showSearch = true, showNotifications = true }) => {
+const Header = ({ showSearch = true, showNotifications = true }) => {
   return (
     <header className="sticky top-0 z-50 w-full glass px-6 py-4 flex flex-col gap-4 safe-area-top">
       <div className="flex items-center justify-between">

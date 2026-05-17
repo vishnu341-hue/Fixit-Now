@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import { useState } from 'react';
 import Header from './Header';
 import BottomNavigation from './BottomNavigation';
 import { motion, AnimatePresence } from 'framer-motion';
