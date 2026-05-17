@@ -61,7 +61,7 @@ body {
 
 .app-scroll {
   scroll-behavior: smooth;
-  overscroll-behavior-y: contain;
+  overflow-y: auto;
   -webkit-overflow-scrolling: touch;
 }
 
